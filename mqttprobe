@@ -1,0 +1,38 @@
+
+
+mqttprobe(){
+
+red=`tput setaf 1`
+reset=`tput sgr0`
+w=red=`tput setaf 7`
+
+
+echo "------------------------------------------------------------------";
+echo "";
+echo "+------------------------------------------+"
+echo "| -github.com/sentinal42                   |"
+echo "|                                          |"
+printf "| %-40s |\n" "`date`"
+echo "|                                          |"
+printf "|`tput bold` %-40s `tput sgr0`|\n" "Target count: $@"
+echo "+------------------------------------------+"
+echo"";
+echo "------------------------------------------------------------------";
+
+
+shodan search --limit $1 --fields ip_str mqtt > iplist.txt
+
+for host in $(cat iplist.txt)
+	do
+		echo "mosquitto_pub -h $host -t "'$SYS'/broker/version" -d";
+		echo"";
+		echo "";
+		echo "Result:";
+		mosquitto_pub -h $host -t "$SYS/broker/version" -m "1.1" -d 
+		echo"";
+		echo "";
+		echo "${red} -------------------------------------------------------------------------------------------------------------${reset}";
+done;
+
+}
+
